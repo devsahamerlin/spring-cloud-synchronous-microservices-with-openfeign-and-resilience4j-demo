@@ -11,6 +11,7 @@
     <groupId>com.merlin.ecom-ms-app</groupId>
     <artifactId>ecom-ms-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>ecom-ms-app</name>
     <description>ecom-ms-app</description>
     <url/>
@@ -20,6 +21,9 @@
     <developers>
         <developer/>
     </developers>
+    <modules>
+        <module>billing-service</module>
+    </modules>
     <scm>
         <connection/>
         <developerConnection/>
