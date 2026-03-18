@@ -1,71 +1,90 @@
-# Spring Cloud Synchronous Microservices with OpenFeign and Resilience4j Demo
+# Architecture Micro-services Synchrone avec Spring Cloud
 
-## [Config repository available](https://github.com/devsahamerlin/spring-cloud-synchronous-microservices-config-repo)
+## 1. Vue d'ensemble
 
-This project demonstrates a **synchronous microservices architecture** built with the **Spring Cloud ecosystem**.  
-It showcases how services communicate via **OpenFeign**, with **Resilience4j** providing circuit breaker capabilities for reliability.
+Ce projet illustre la mise en œuvre d'une architecture micro-services synchrone basée sur l'écosystème **Spring Cloud**. La communication inter-services est assurée par **OpenFeign**, tandis que la tolérance aux pannes est garantie par **Resilience4j**.
 
-## Architecture Overview
+La configuration centralisée est disponible dans le dépôt dédié : [Config Repository](https://github.com/devsahamerlin/spring-cloud-synchronous-microservices-config-repo).
 
-- **billing-service**: Orchestrates requests.
-    - Calls **customer-service** synchronously to retrieve customer details.
-    - Calls **inventory-service** synchronously to retrieve product details.
-    - Uses **Resilience4j** circuit breakers to handle service failures gracefully.
-- **customer-service**: Provides customer information.
-- **inventory-service**: Provides product information.
-- **discovery-service**: Handles service registration and discovery (Eureka).
-- **gateway-service**: Provides API gateway and routing.
-- **config-service**: Centralized configuration for all microservices. [Config repository available](https://github.com/devsahamerlin/spring-cloud-synchronous-microservices-config-repo)
+---
 
-## Key Features
-- Built with **Spring Boot & Spring Cloud**
-- **OpenFeign** for synchronous service-to-service communication
-- **Resilience4j** for fault tolerance (circuit breaker, retry)
-- **Eureka Discovery Service**
-- **Spring Cloud Gateway**
-- **Spring Cloud Config Server [Config repository available](https://github.com/devsahamerlin/spring-cloud-synchronous-microservices-config-repo)**
-- **Dockerized` (to be done)`** for easy local setup and testing
+## 2. Architecture Technique
 
-## Application testing
+Le système s'articule autour de composants autonomes interconnectés :
 
-### Eureka Discovery Service http://localhost:8761
+-   **Billing Service** : Agissant comme orchestrateur, ce service sollicite de manière synchrone les *Customer Service* et *Inventory Service* pour consolider les factures. L'intégration de circuits breakers (Resilience4j) permet de maintenir la continuité de service en isolant les défaillances des dépendances.
+-   **Customer Service** : Service dédié à la gestion des données clients.
+-   **Inventory Service** : Service responsable du catalogue produits et des stocks.
+-   **Discovery Service** : Registre basé sur Eureka permettant l'enregistrement et la découverte dynamique des instances de services.
+-   **Gateway Service** : Point d'entrée unique (API Gateway) assurant le routage des requêtes vers les services backend.
+-   **Config Service** : Serveur de configuration distribuant les propriétés à l'ensemble des micro-services.
 
+---
+
+## 3. Gestion des Identités et des Accès (IAM)
+
+La sécurisation de l'infrastructure est déléguée à **Keycloak**. Ce service prend en charge l'authentification unique (SSO) et la gestion centralisée des autorisations. Il permet de dissocier la logique de sécurité du code métier des applications.
+
+Pour le déploiement, la configuration initiale et la validation des flux d'authentification, une documentation spécifique est disponible :
+
+**[Guide de mise en œuvre Keycloak](infra/README.md)**
+
+---
+
+## 4. Stack Technologique
+
+-   **Core** : Spring Boot, Spring Cloud.
+-   **Communication** : OpenFeign (Synchronous).
+-   **Résilience** : Resilience4j (Circuit Breaker, Retry, TimeLimiter).
+-   **Service Discovery** : Netflix Eureka.
+-   **Routing** : Spring Cloud Gateway.
+-   **Configuration** : Spring Cloud Config Server.
+-   **Sécurité** : Keycloak (IAM).
+-   **Déploiement** : Docker (Support conteneurisation).
+
+---
+
+## 5. Validation et Tests
+
+### Service de Découverte (Eureka)
+Le tableau de bord permet de visualiser les instances enregistrées : `http://localhost:8761`.
 ![ereuka-discovery.png](images/ereuka-discovery.png)
 
-### Spring Cloud Config Service http://localhost:9999
+### Configuration Centralisée
+Validation du chargement des configurations via le Config Service : `http://localhost:9999`.
 
-- config-server-billing-service-prod
+*Configuration Billing Service (Prod)*
 ![config-server-billing-service-prod.png](images/config-server-billing-service-prod.png)
 
-- config-server-customer-service-prod
+*Configuration Customer Service (Prod)*
 ![config-server-customer-service-prod.png](images/config-server-customer-service-prod.png)
 
-- config-server-inventory-service-dev
+*Configuration Inventory Service (Dev)*
 ![config-server-inventory-service-prod.png](images/config-server-inventory-service-dev.png)
 
+### Accès via API Gateway
+Les services métiers sont exposés via la passerelle : `http://localhost:8888`.
 
-
-### customer-service using API Gateway http://localhost:8888/CUSTOMER-SERVICE/customers
-
+*Customer Service* (`/CUSTOMER-SERVICE/customers`)
 ![customer-service.png](images/customer-service.png)
 
-### inventory-service using API Gateway - http://localhost:8888/INVENTORY-SERVICE/products
-
+*Inventory Service* (`/INVENTORY-SERVICE/products`)
 ![inventory-service.png](images/inventory-service.png)
 
-- http://localhost:8888/BILLING-SERVICE/api/bills
-
+*Billing Service* (`/BILLING-SERVICE/api/bills`)
 ![bills.png](images/bills.png)
 
-### billing-service using API Gateway - http://localhost:8888/BILLING-SERVICE/api/bills/1
+### Mécanismes de Résilience
+Démonstration de la gestion des pannes lors de l'indisponibilité d'un service dépendant.
 
-![billing-service.png](images/billing-service.png)
-
-- Customer service down with circuit breaker default method
-
+*Customer Service indisponible (Circuit Breaker actif avec réponse par défaut)*
 ![customer-service-circuit-breaker.png](images/customer-service-circuit-breaker.png)
 
-- Inventory service down without circuit breaker
-
+*Inventory Service indisponible (Sans Circuit Breaker - Erreur propagée)*
 ![Inventory-service-down-without-circuit-breaker.png](images/Inventory-service-down-without-circuit-breaker.png)
 
+---
+
+## 6. Prochaines Étapes : Sécurisation des Micro-services
+
+L'intégration de la couche de sécurité constitue la prochaine phase d'évolution pour garantir l'intégrité et la confidentialité des échanges au sein de l'architecture distribuée.
