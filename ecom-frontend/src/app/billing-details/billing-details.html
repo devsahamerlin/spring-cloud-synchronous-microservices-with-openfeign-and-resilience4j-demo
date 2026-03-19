@@ -1,0 +1,79 @@
+<div class="p-6 max-w-5xl mx-auto">
+
+  @if (loading()) {
+    <div class="flex justify-center items-center py-12">
+      <span class="text-gray-500 text-sm">Loading bill details...</span>
+    </div>
+  } @else if (error()) {
+    <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3">
+      {{ error() }}
+    </div>
+  } @else if (bill()) {
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <a routerLink="/bills" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+          ← Back to Bills
+        </a>
+        <h1 class="text-2xl font-bold text-gray-800 mt-1">Bill #{{ bill()!.id }}</h1>
+        <p class="text-sm text-gray-500 mt-0.5">{{ bill()!.billingDate | date: 'long' }}</p>
+      </div>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="bg-white border border-gray-200 rounded-xl p-5 mb-6 shadow-sm">
+      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Customer</h2>
+      @if (bill()!.customer) {
+        <div class="flex gap-8 text-sm text-gray-700">
+          <div><span class="font-medium">ID:</span> {{ bill()!.customer.id }}</div>
+          <div><span class="font-medium">Name:</span> {{ bill()!.customer.name }}</div>
+          <div><span class="font-medium">Email:</span> {{ bill()!.customer.email }}</div>
+        </div>
+      } @else {
+        <p class="text-sm text-gray-400 italic">No customer information available.</p>
+      }
+    </div>
+
+    <!-- Product Items -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-6">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Product Items</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-left text-gray-700">
+          <thead class="bg-gray-50 text-xs uppercase text-gray-500 tracking-wider">
+            <tr>
+              <th class="px-6 py-3">#</th>
+              <th class="px-6 py-3">Product ID</th>
+              <th class="px-6 py-3">Unit Price</th>
+              <th class="px-6 py-3">Quantity</th>
+              <th class="px-6 py-3 text-right">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (item of bill()!.productItems; track item.id) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 font-medium text-gray-900">{{ item.id }}</td>
+                <td class="px-6 py-4">{{ item.productId }}</td>
+                <td class="px-6 py-4">{{ item.price | currency: 'USD' }}</td>
+                <td class="px-6 py-4">{{ item.quantity }}</td>
+                <td class="px-6 py-4 text-right font-medium">
+                  {{ item.price * item.quantity | currency: 'USD' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+          <tfoot class="bg-gray-50">
+            <tr>
+              <td colspan="4" class="px-6 py-4 text-right font-semibold text-gray-700">Total</td>
+              <td class="px-6 py-4 text-right font-bold text-gray-900">
+                {{ total | currency: 'USD' }}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  }
+
+</div>

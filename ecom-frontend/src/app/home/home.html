@@ -1,0 +1,59 @@
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 flex flex-col items-center justify-center px-4">
+
+  <!-- Card -->
+  <div class="bg-white rounded-2xl shadow-lg max-w-lg w-full px-10 py-12 text-center">
+
+    <!-- Logo / Icon -->
+    <div class="flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mx-auto mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5M3.75 6.75h16.5M3.75 17.25h16.5" />
+      </svg>
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">ecom-ms-app</h1>
+    <p class="text-gray-500 text-sm mb-8">
+      Plateforme de gestion de facturation micro-services.<br />
+      Connectez-vous pour accéder à vos factures.
+    </p>
+
+    @if (isAuthenticated()) {
+      <!-- Authenticated state -->
+      <div class="bg-indigo-50 rounded-xl px-5 py-4 mb-6 text-left">
+        <p class="text-xs text-indigo-500 font-medium uppercase tracking-wide mb-1">Connecté en tant que</p>
+        <p class="text-gray-800 font-semibold">{{ username() }}</p>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <button
+          (click)="goToBills()"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+        >
+          Accéder aux Factures →
+        </button>
+        <button
+          (click)="logout()"
+          class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors"
+        >
+          Se déconnecter
+        </button>
+      </div>
+    } @else {
+      <!-- Unauthenticated state -->
+      <button
+        (click)="login()"
+        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M18 12H9m0 0l3-3m-3 3l3 3" />
+        </svg>
+        Se connecter avec Keycloak
+      </button>
+    }
+
+  </div>
+
+  <!-- Footer -->
+  <p class="mt-8 text-xs text-gray-400">Secured by Keycloak · ecom-ms-realm</p>
+</div>
+

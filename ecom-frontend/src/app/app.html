@@ -1,0 +1,28 @@
+<nav class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between shadow-sm">
+  <div class="flex items-center gap-6">
+    <a routerLink="/" class="font-bold text-indigo-600 text-lg tracking-tight">ecom-ms-app</a>
+    @if (isAuthenticated()) {
+      <a
+        routerLink="/bills"
+        routerLinkActive="text-indigo-600 font-semibold"
+        class="text-sm text-gray-600 hover:text-indigo-600 transition-colors"
+      >
+        Bills
+      </a>
+    }
+  </div>
+  <div class="flex items-center gap-4">
+    @if (isAuthenticated()) {
+      <span class="text-sm text-gray-500">{{ username() }}</span>
+      <button
+        (click)="logout()"
+        class="text-sm border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-1.5 px-4 rounded-lg transition-colors"
+      >
+        Logout
+      </button>
+    }
+  </div>
+</nav>
+<main class="min-h-screen bg-gray-50">
+  <router-outlet />
+</main>

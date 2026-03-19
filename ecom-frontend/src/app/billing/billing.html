@@ -1,0 +1,53 @@
+<div class="p-6 max-w-5xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Bills</h1>
+
+  @if (loading()) {
+    <div class="flex justify-center items-center py-12">
+      <span class="text-gray-500 text-sm">Loading bills...</span>
+    </div>
+  } @else if (error()) {
+    <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3">
+      {{ error() }}
+    </div>
+  } @else if (bills().length === 0) {
+    <p class="text-gray-500 text-sm">No bills found.</p>
+  } @else {
+    <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+      <table class="min-w-full text-sm text-left text-gray-700">
+        <thead class="bg-gray-50 text-xs uppercase text-gray-500 tracking-wider">
+          <tr>
+            <th class="px-6 py-3">#</th>
+            <th class="px-6 py-3">Billing Date</th>
+            <th class="px-6 py-3">Customer ID</th>
+            <th class="px-6 py-3">Customer</th>
+            <th class="px-6 py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (bill of bills(); track getBillId(bill)) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 font-medium text-gray-900">{{ getBillId(bill) }}</td>
+              <td class="px-6 py-4">{{ bill.billingDate | date: 'medium' }}</td>
+              <td class="px-6 py-4">{{ bill.customerId }}</td>
+              <td class="px-6 py-4">
+                @if (bill.customer) {
+                  <span>{{ bill.customer.name }}</span>
+                } @else {
+                  <span class="text-gray-400 italic">N/A</span>
+                }
+              </td>
+              <td class="px-6 py-4 text-right">
+                <a
+                  [routerLink]="['/bills', getBillId(bill)]"
+                  class="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+                >
+                  View details →
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
