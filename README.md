@@ -3,7 +3,6 @@
 > Projet pédagogique illustrant la mise en œuvre d'une architecture micro-services synchrone, sécurisée et dotée d'un frontend Angular, en s'appuyant sur l'écosystème **Spring Cloud**, **Keycloak** et **Angular 21**.
 
 > **Pattern illustré :** Microservices synchrones avec Circuit Breaker, configuration centralisée, Service Discovery et gestion des identités via Keycloak.
-> Pour une version asynchrone orientée événements avec Kafka, voir le projet PFE lié.
 
 ---
 
